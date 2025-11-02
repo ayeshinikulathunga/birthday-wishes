@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Card for Podi Akka</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        body {
+            background-color: #fdbf00;
+            overflow: hidden;
+        }
+
+        .card {
+            width: 400px;
+            height: 600px;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            perspective: 1200px;
+            -webkit-perspective: 1200px;
+        }
+
+        .outside, .inside {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 2s;
+        }
+
+        .outside {
+            transform-origin: left;
+            z-index: 2;
+        }
+
+        .card:hover .outside {
+            transform: rotateY(-180deg);
+        }
+
+        .inside {
+            left: 0;
+            background: linear-gradient(to right, #ffe4e1, #fff0f5);
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            z-index: 1;
+        }
+
+        .front, .back {
+            height: 100%;
+            width: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            position: absolute;
+            border: 1px solid #ddd;
+        }
+
+        .front {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            background: linear-gradient(to left, #e0e0e0, white 30%);
+        }
+
+        .front p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff1493;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: -150px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .cake {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top-layer {
+            height: 80px;
+            width: 240px;
+            background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%);
+            position: relative;
+            border-radius: 10px 10px 0 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .top-layer::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            height: 8px;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .middle-layer {
+            height: 100px;
+            width: 300px;
+            background: linear-gradient(180deg, #ffd700 0%, #ffb347 100%);
+            position: relative;
+            border-radius: 10px 10px 0 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .middle-layer::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            height: 8px;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .bottom-layer {
+            height: 120px;
+            width: 360px;
+            background: linear-gradient(180deg, #87ceeb 0%, #4169e1 100%);
+            border-radius: 10px 10px 0 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .bottom-layer::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 8px;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .candle {
+            width: 8px;
+            height: 40px;
+            background: linear-gradient(to right, #ff6b9d, #ffa5c3);
+            position: absolute;
+            top: -40px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .candle:nth-child(1) { left: 40px; }
+        .candle:nth-child(2) { left: 80px; }
+        .candle:nth-child(3) { left: 120px; }
+        .candle:nth-child(4) { left: 160px; }
+        .candle:nth-child(5) { left: 200px; }
+
+        .flame {
+            width: 12px;
+            height: 16px;
+            background: radial-gradient(circle, #ffeb3b 20%, #ff9800 60%, #ff5722);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 0.3s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleY(1); }
+            100% { transform: translateX(-50%) scaleY(1.1); }
+        }
+
+        .message {
+            text-align: center;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .message h2 {
+            color: #ff1493;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .message p {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .signature {
+            margin-top: 25px;
+            font-style: italic;
+            color: #ff1493;
+            font-size: 18px;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff1493;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+
+        .confetti:nth-child(1) { left: 10%; animation-delay: 0s; background: #ff1493; }
+        .confetti:nth-child(2) { left: 20%; animation-delay: 0.5s; background: #ffd700; }
+        .confetti:nth-child(3) { left: 30%; animation-delay: 1s; background: #00ffff; }
+        .confetti:nth-child(4) { left: 40%; animation-delay: 1.5s; background: #ff69b4; }
+        .confetti:nth-child(5) { left: 50%; animation-delay: 0.3s; background: #98fb98; }
+        .confetti:nth-child(6) { left: 60%; animation-delay: 0.8s; background: #ff6347; }
+        .confetti:nth-child(7) { left: 70%; animation-delay: 1.2s; background: #dda0dd; }
+        .confetti:nth-child(8) { left: 80%; animation-delay: 0.6s; background: #ffa500; }
+        .confetti:nth-child(9) { left: 90%; animation-delay: 1.8s; background: #87ceeb; }
+
+        .instruction {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #444;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .champagne-bottle {
+            position: absolute;
+            right: 50px;
+            bottom: 40px;
+            width: 40px;
+            height: 120px;
+            z-index: 5;
+        }
+
+        .bottle-body {
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(to right, #1a5f1a, #2d8f2d, #1a5f1a);
+            border-radius: 0 0 8px 8px;
+            position: relative;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .bottle-neck {
+            width: 15px;
+            height: 30px;
+            background: linear-gradient(to right, #0d400d, #1a5f1a);
+            margin: 0 auto;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .bottle-cap {
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(to bottom, #ffd700, #b8860b);
+            margin: 0 auto;
+            border-radius: 3px 3px 0 0;
+            position: relative;
+        }
+
+        .bottle-label {
+            position: absolute;
+            top: 20px;
+            left: 5px;
+            right: 5px;
+            height: 25px;
+            background: linear-gradient(to right, #fff8dc, #fffacd);
+            border: 1px solid #daa520;
+            border-radius: 2px;
+        }
+
+        .sparkles {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkle 1.5s infinite;
+        }
+
+        .sparkle:nth-child(1) { left: 0; animation-delay: 0s; }
+        .sparkle:nth-child(2) { left: 10px; animation-delay: 0.3s; }
+        .sparkle:nth-child(3) { left: 20px; animation-delay: 0.6s; }
+
+        @keyframes sparkle {
+            0%, 100% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { transform: translateY(-15px) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+
+    <div class="card">
+        <div class="outside">
+            <div class="front">
+                <p>Happy Birthday<br>Podi Akke!</p>
+                <div class="cake">
+                    <div class="top-layer">
+                        <div class="candle"><div class="flame"></div></div>
+                        <div class="candle"><div class="flame"></div></div>
+                        <div class="candle"><div class="flame"></div></div>
+                        <div class="candle"><div class="flame"></div></div>
+                        <div class="candle"><div class="flame"></div></div>
+                    </div>
+                    <div class="middle-layer"></div>
+                    <div class="bottom-layer"></div>
+                </div>
+                <div class="champagne-bottle">
+                    <div class="sparkles">
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                    </div>
+                    <div class="bottle-cap"></div>
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body">
+                        <div class="bottle-label"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="back"></div>
+        </div>
+        <div class="inside">
+            <div class="message">
+                <h2>To My dear podi akka</h2>
+                <p>Happy Birthday, Podi Akke! 🎉</p>
+                <p>You've always been such a special part of my life.</p>
+                <p>Watching you live such a wonderful life brings me so much joy.</p>
+                <p>May this year bring you even more happiness,</p>
+                <p>love and beautiful moments.</p>
+                <p>You deserve all the best life has to offer!</p>
+                <div class="signature">With love,<br>Sudu ❤️</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instruction">Hover over the card to open it!</div>
+</body>
+</html>
